@@ -3,7 +3,6 @@ import AutoSidebar from "vite-plugin-vitepress-auto-sidebar";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  outDir: "dist",
   title: "陈适时",
   description: "aasd",
   vite: {
