@@ -15,7 +15,6 @@ export default defineConfig({
           v["/docs/"][0].items.sort((a, b) => {
             return a.text.localeCompare(b.text, undefined, { numeric: true });
           });
-          console.log("v:", v["/docs/"][0].items);
           return v;
         },
       }),
@@ -23,7 +22,7 @@ export default defineConfig({
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: "/favicon.ico",
+    logo: "../favicon.ico",
     socialLinks: [
       {
         link: "https://juejin.cn/user/1698079717464174",
