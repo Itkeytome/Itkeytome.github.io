@@ -20,9 +20,10 @@ export default defineConfig({
       }),
     ],
   },
+  lastUpdated: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: "../favicon.ico",
+    logo: "/favicon.ico",
     socialLinks: [
       {
         link: "https://juejin.cn/user/1698079717464174",
