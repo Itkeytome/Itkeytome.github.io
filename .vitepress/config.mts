@@ -3,7 +3,7 @@ import AutoSidebar from "vite-plugin-vitepress-auto-sidebar";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "陈适时",
+  title: "陈适时: Blog",
   description: "aasd",
   head: [
     [
@@ -19,13 +19,15 @@ export default defineConfig({
     plugins: [
       AutoSidebar({
         path: ".",
-        collapsed: true,
-        ignoreList: [".obsidian", ".git", "node_modules"],
+        collapsed: false,
+        ignoreList: [".obsidian", ".git", "node_modules", ".github", "public"],
         sideBarResolved: (v) => {
-          v["/docs/"][0].items.sort((a, b) => {
-            return a.text.localeCompare(b.text, undefined, { numeric: true });
-          });
-          return v;
+          v["/docs/"][0].items.sort(
+            (a: { text: string }, b: { text: string }) => {
+              return a.text.localeCompare(b.text, undefined, { numeric: true });
+            }
+          );
+          return v["/docs/"][0].items;
         },
       }),
     ],
@@ -52,7 +54,24 @@ export default defineConfig({
       },
       { icon: "github", link: "https://github.com/Itkeytome" },
     ],
-    sidebar: [],
+    sidebar: [
+      {
+        text: "Section Title A",
+        items: [
+          { text: "Item A", link: "/item-a" },
+          { text: "Item B", link: "/item-b" },
+        ],
+        collapsed: false,
+      },
+      {
+        text: "Section Title B",
+        items: [
+          { text: "Item C", link: "/item-c" },
+          { text: "Item D", link: "/item-d" },
+        ],
+        collapsed: false,
+      },
+    ],
     nav: [{ text: "掘金 JueJin", link: "https://github.com/..." }],
   },
 });
