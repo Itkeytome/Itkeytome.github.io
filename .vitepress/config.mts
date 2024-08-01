@@ -5,11 +5,21 @@ import AutoSidebar from "vite-plugin-vitepress-auto-sidebar";
 export default defineConfig({
   title: "陈适时",
   description: "aasd",
+  head: [
+    [
+      "link",
+      {
+        type: "image/x-icon",
+        rel: "shortcut icon",
+        href: "https://yomionly.com/picture/favicon.ico",
+      },
+    ],
+  ],
   vite: {
     plugins: [
       AutoSidebar({
         path: ".",
-        collapsed: false,
+        collapsed: true,
         ignoreList: [".obsidian", ".git", "node_modules"],
         sideBarResolved: (v) => {
           v["/docs/"][0].items.sort((a, b) => {
