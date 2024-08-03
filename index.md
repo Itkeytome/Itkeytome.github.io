@@ -3,22 +3,19 @@
 layout: home
 
 hero:
-  name: "陈适时的博客"
-  text: "aasd"
-  tagline: My great project tagline
+  name: "陈适时"
+  text: "Blog"
+  tagline: 想多了都是问题，做多了都是答案。
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /docs/第01章—开篇词
-    - theme: alt
-      text: View on GitHub
-      link: https://github.com/vuejs/vitepress
+      text: 看看我在学啥呗
+      link: /docs/Nest/入门
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 📒 学习笔记
+    details: 记录每次学习之后的笔记，笔记都会上传到这里。
+  - title: 💻 开发过程
+    details: 偶尔会将一些开发中遇到的难题，同步至此。
+  - title: 📱 产品思维
+    details: 虽然我是一个开发，但我也会形成自己的产品思维。
 ---
