@@ -4,17 +4,13 @@
 >
 > `DI`是`Dependency Injection`的缩写，中文名：「**依赖注入**」。
 
-[前端中的IoC理念]: https://juejin.cn/post/6844903750843236366	"本文参考"
+[前端中的IoC理念]: https://juejin.cn/post/6844903750843236366 "本文参考"
 
 例子、内容与原文很大一部分一样，本文仅作为整理并整合为笔记，不作盈利。如有侵权，请联系笔者删除。
-
-
 
 ### IOC 是什么
 
 它不是一个具体的技术，而是一个实现对象解耦的思想。其中包含三个准则：
-
-
 
 #### 高层次的模块不应该依赖于低层次的模块，它们都应该依赖于抽象
 
@@ -22,39 +18,37 @@
 
 ```js
 // app.js
-import Router from './modules/Router';
-import Track from './modules/Track';
+import Router from "./modules/Router";
+import Track from "./modules/Track";
 
 class App {
-    constructor(options) {
-        this.options = options;
-        this.router = new Router();
-        this.track = new Track();
+  constructor(options) {
+    this.options = options;
+    this.router = new Router();
+    this.track = new Track();
 
-        this.init();
-    }
+    this.init();
+  }
 
-    init() {
-        window.addEventListener('DOMContentLoaded', () => {
-            this.router.to('home');
-            this.track.tracking();
-            this.options.onReady();
-        });
-    }
+  init() {
+    window.addEventListener("DOMContentLoaded", () => {
+      this.router.to("home");
+      this.track.tracking();
+      this.options.onReady();
+    });
+  }
 }
 
 // index.js
-import App from 'path/to/App';
+import App from "path/to/App";
 new App({
-    onReady() {
-        // do something here...
-    },
+  onReady() {
+    // do something here...
+  },
 });
 ```
 
 这个时候，如果`Router`内部需要传参数实现一些模式，如启用`history`模式则需要改为`this.router = new Router({mode: "history"})`，每次`Router`内部的修改都会需要到`App`去改动，这时候其实就是**高层次的模块 `App` 依赖了两个低层次的模块 `Router` 和 `Track`，对低层次模块的修改都会影响高层次的模块 `App`**，要解决这个问题，就要用到**依赖注入（Dependency Injection）**
-
-
 
 #### DI 是什么
 
@@ -65,34 +59,34 @@ new App({
 ```js
 // app.js
 class App {
-    constructor(options) {
-        this.options = options;
-        this.router = options.router;
-        this.track = options.track;
+  constructor(options) {
+    this.options = options;
+    this.router = options.router;
+    this.track = options.track;
 
-        this.init();
-    }
+    this.init();
+  }
 
-    init() {
-        window.addEventListener('DOMContentLoaded', () => {
-            this.router.to('home');
-            this.track.tracking();
-            this.options.onReady();
-        });
-    }
+  init() {
+    window.addEventListener("DOMContentLoaded", () => {
+      this.router.to("home");
+      this.track.tracking();
+      this.options.onReady();
+    });
+  }
 }
 
 // index.js
-import App from 'path/to/App';
-import Router from './modules/Router';
-import Track from './modules/Track';
+import App from "path/to/App";
+import Router from "./modules/Router";
+import Track from "./modules/Track";
 
 new App({
-    router: new Router(),
-    track: new Track(),
-    onReady() {
-        // do something here...
-    },
+  router: new Router(),
+  track: new Track(),
+  onReady() {
+    // do something here...
+  },
 });
 ```
 
@@ -104,44 +98,40 @@ new App({
 
 这时候就会引出`IOC`容器的第二条准则。
 
-
-
 #### 抽象不应该依赖于具体实现，具体实现应该依赖于抽象
 
 根据这一条准则再进行修改代码
 
 这里先从最终修改完成的代码进行阅读与拆解
 
-
-
 ```js
 class App {
-    static modules = []
-    constructor(options) {
-        this.options = options;
-        this.init();
-    }
-    init() {
-        window.addEventListener('DOMContentLoaded', () => {
-            this.initModules();
-            this.options.onReady(this);
-        });
-    }
-    static use(module) {
-        Array.isArray(module) ? module.map(item => App.use(item)) : App.modules.push(module);
-    }
-    initModules() {
-        App.modules.map(module => module.init && typeof module.init == 'function' && module.init(this));
-    }
+  static modules = [];
+  constructor(options) {
+    this.options = options;
+    this.init();
+  }
+  init() {
+    window.addEventListener("DOMContentLoaded", () => {
+      this.initModules();
+      this.options.onReady(this);
+    });
+  }
+  static use(module) {
+    Array.isArray(module)
+      ? module.map((item) => App.use(item))
+      : App.modules.push(module);
+  }
+  initModules() {
+    App.modules.map(
+      (module) =>
+        module.init && typeof module.init == "function" && module.init(this)
+    );
+  }
 }
-
 ```
 
-
-
 这个时候 `App` 内已经没有**「具体实现」**了，看不到任何业务代码了，那么如何使用 `App` 来管理我们的依赖呢：
-
-
 
 ```js
 // modules/Router.js
@@ -181,73 +171,61 @@ new App({
 });
 ```
 
-
-
 可以发现 `App` 模块在使用上也非常的方便，通过 `App.use()` 方法来「注入」依赖，在 `./modules/some-module.js` 中按照一定的「**约定**」去初始化相关配置，比如此时需要新增一个 `Share` 模块的话，无需到 `App` 内部去修改内容：
-
-
 
 ```js
 // modules/Share.js
-import Share from 'path/to/Share';
+import Share from "path/to/Share";
 export default {
-    init(app) {
-        app.share = new Share();
-        app.setShare = data => app.share.setShare(data);
-    }
+  init(app) {
+    app.share = new Share();
+    app.setShare = (data) => app.share.setShare(data);
+  },
 };
 
 // index.js
 App.use(Share);
 new App({
-    // ...
-    onReady(app) {
-        app.setShare({
-            title: 'Hello IoC.',
-            description: 'description here...',
-            // some other data here...
-        });
-    }
+  // ...
+  onReady(app) {
+    app.setShare({
+      title: "Hello IoC.",
+      description: "description here...",
+      // some other data here...
+    });
+  },
 });
-
 ```
-
-
 
 直接在 `App` 外部去 `use` 这个 `Share` 模块即可，对模块的注入和配置极为方便。
 
 那么在 `App` 内部到底做了哪些工作呢，首先从 `App.use` 方法说起：
 
-
-
 ```js
 class App {
-    static modules = []
-    static use(module) {
-        Array.isArray(module) ? module.map(item => App.use(item)) : App.modules.push(module);
-    }
+  static modules = [];
+  static use(module) {
+    Array.isArray(module)
+      ? module.map((item) => App.use(item))
+      : App.modules.push(module);
+  }
 }
-
 ```
-
-
 
 可以很清楚的发现，`App.use` 做了一件非常简单的事情，就是把依赖保存在了 `App.modules` 属性中，等待后续初始化模块的时候被调用。
 
 接下来我们看一下模块初始化方法 `this.initModules()` 具体做了什么事情：
 
-
-
 ```js
 class App {
-    initModules() {
-        App.modules.map(module => module.init && typeof module.init == 'function' && module.init(this));
-    }
+  initModules() {
+    App.modules.map(
+      (module) =>
+        module.init && typeof module.init == "function" && module.init(this)
+    );
+  }
 }
-
 ```
-
-
 
 可以发现该方法同样做了一件非常简单的事情，就是遍历 `App.modules` 中所有的模块，判断模块是否包含 `init` 属性且该属性必须是一个函数，如果判断通过的话，该方法就会去执行模块的 `init` 方法并把 `App` 的实例 `this` 传入其中，以便在模块中引用它。
 
@@ -258,8 +236,6 @@ class App {
 
 这时候就会引出`IOC`容器的第三条准则。
 
-
-
 #### 面向接口编程，而不要面向实现编程
 
 `App` 不关心模块具体实现了什么，只要满足对 **接口** `init` 的「约定」就可以了。
@@ -268,45 +244,17 @@ class App {
 
 ```js
 // modules/Router.js
-import Router from 'path/to/Router';
+import Router from "path/to/Router";
 export default {
-    init(app) {
-        app.router = new Router(app.options.router);
-        app.router.to('home');
-    }
+  init(app) {
+    app.router = new Router(app.options.router);
+    app.router.to("home");
+  },
 };
-
 ```
-
-
 
 ### 总结
 
-`App` 模块此时应该称之为「**容器**」比较合适了，跟业务已经没有任何关系了，它仅仅只是提供了一些方法来辅助管理注入的依赖和控制模块如何执行。
+`App` 模块此时应该称之为**「容器」**比较合适了，跟业务已经没有任何关系了，它仅仅只是提供了一些方法来辅助管理注入的依赖和控制模块如何执行。
 
 控制反转（`Inversion of Control`）是一种「**思想**」，依赖注入（`Dependency Injection`）则是这一思想的一种具体「**实现方式**」，而这里的 `App` 则是辅助依赖管理的一个「**容器**」。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
