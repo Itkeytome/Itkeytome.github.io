@@ -37,29 +37,36 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     logo: "/favicon.ico",
     socialLinks: [{ icon: "github", link: "https://github.com/Itkeytome" }],
-    sidebar: [
-      {
-        text: "Section Title A",
-        items: [
-          { text: "Item A", link: "/item-a" },
-          { text: "Item B", link: "/item-b" },
-        ],
-        collapsed: false,
-      },
-      {
-        text: "Section Title B",
-        items: [
-          { text: "Item C", link: "/item-c" },
-          { text: "Item D", link: "/item-d" },
-        ],
-        collapsed: false,
-      },
-    ],
+    sidebar: [],
     nav: [
       { text: "掘金 JueJin", link: "https://juejin.cn/user/1698079717464174" },
     ],
+    // 右侧页面导航栏配置
+    outlineTitle: "页面导航",
+    outline: [2, 6], // 定义标题级别,字符串"deep"相当于是[2,6]
+    // 搜索框配置
+    search: {
+      provider: "local",
+      options: {
+        translations: {
+          button: {
+            buttonText: "搜索文档",
+            buttonAriaLabel: "搜索文档",
+          },
+          modal: {
+            noResultsText: "无法找到相关结果",
+            resetButtonTitle: "清除查询条件",
+            footer: {
+              selectText: "选择",
+              navigateText: "切换",
+            },
+          },
+        },
+      },
+    },
   },
   markdown: {
     toc: {},
+    lineNumbers: true,
   },
 });

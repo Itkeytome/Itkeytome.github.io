@@ -8,7 +8,7 @@
 
 ```tsx
 import React from "react";
-import { useBoolean } from "ahooks";
+import { useBoolean } from "ahooks"; // [!code error]
 
 export default () => {
   const [state, { toggle, setTrue, setFalse }] = useBoolean(true);

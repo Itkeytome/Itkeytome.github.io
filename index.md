@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: 看看我在学啥呗
-      link: /docs/Nest/1.Nest-Cli
+      link: /docs/开发手册/权威指南.html
 
 features:
   - title: 📒 学习笔记
